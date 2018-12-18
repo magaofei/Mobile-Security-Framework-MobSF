@@ -14,13 +14,19 @@ from MobSF.utils import (
 
 from StaticAnalyzer.views.android.manifest_analysis import read_manifest
 
-def run(request):
+def run(request, api=False):
     """View the manifest."""
     try:
         directory = settings.BASE_DIR  # BASE DIR
-        md5 = request.GET['md5']  # MD5
-        typ = request.GET['type']  # APK or SOURCE
-        binary = request.GET['bin']
+        if api:
+            md5 = request.POST['hash']  # MD5
+            typ = request.POST['type']  # APK or SOURCE
+            binary = request.POST['bin']
+        else:
+            md5 = request.GET['md5']  # MD5
+            typ = request.GET['type']  # APK or SOURCE
+            binary = request.GET['bin']
+
         match = re.match('^[0-9a-f]{32}$', md5)
         if match and (typ in ['eclipse', 'studio', 'apk']) and (binary in ['1', '0']):
             app_dir = os.path.join(
@@ -37,6 +43,8 @@ def run(request):
                 'file': 'AndroidManifest.xml',
                 'dat': manifest
             }
+            if api:
+                return context
             template = "static_analysis/view_mani.html"
             return render(request, template, context)
     except:

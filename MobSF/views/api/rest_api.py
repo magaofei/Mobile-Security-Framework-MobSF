@@ -44,8 +44,14 @@ from StaticAnalyzer.views.windows import (
     staticanalyzer_windows
 )
 
+<<<<<<< HEAD
 from StaticAnalyzer import forms
 
+=======
+from StaticAnalyzer.views.android import (
+    manifest_view
+)
+>>>>>>> api_androidmanifest
 
 BAD_REQUEST = 400
 OK = 200
@@ -226,3 +232,24 @@ def api_find(request):
     if not form.is_valid():
         return JsonResponse(FormUtil.errors_message(form), status=400)
     return find.run(request, IS_API)
+
+@request_method(['POST'])
+@csrf_exempt
+def api_manifest(request):
+    """
+    :param type ipa/apk
+    """
+    params = ['bin', 'type', 'hash']
+    if set(request.POST) >= set(params):
+        scan_type = request.POST.get('type')
+        md5 = request.POST.get('hash')
+        if scan_type in ['eclipse', 'studio', 'apk']:
+            resp = manifest_view.run(request, api=True)
+        elif scan_type == 'ipa':
+            resp = ios_view_source.view_info_plist(md5)
+        else:
+            return make_api_response({"error": "Bad Parameters"}, 400) 
+
+        return make_api_response(resp, 200)
+    else:
+        return make_api_response({"error": "Missing Parameters"}, 422)
