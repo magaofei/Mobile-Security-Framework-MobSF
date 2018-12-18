@@ -44,14 +44,11 @@ from StaticAnalyzer.views.windows import (
     staticanalyzer_windows
 )
 
-<<<<<<< HEAD
 from StaticAnalyzer import forms
 
-=======
 from StaticAnalyzer.views.android import (
     manifest_view
 )
->>>>>>> api_androidmanifest
 
 BAD_REQUEST = 400
 OK = 200
