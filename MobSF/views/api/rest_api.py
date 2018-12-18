@@ -18,6 +18,11 @@ from MobSF.utils import (
 from MobSF.views.helpers import (
     request_method,
 )
+
+from MobSF.forms import (
+    FormUtil
+)
+
 from StaticAnalyzer.views.shared_func import (
     pdf
 )
@@ -28,7 +33,9 @@ from StaticAnalyzer.views.ios.static_analyzer import (
     static_analyzer_ios,
 )
 from StaticAnalyzer.views.android import (
-    view_source
+    view_source,
+    java as java_file,
+    find
 )
 from StaticAnalyzer.views.ios import (
     view_source as ios_view_source
@@ -37,9 +44,13 @@ from StaticAnalyzer.views.windows import (
     staticanalyzer_windows
 )
 
+from StaticAnalyzer import forms
+
 
 BAD_REQUEST = 400
 OK = 200
+
+IS_API = True
 
 
 def make_api_response(data, status=OK):
@@ -198,3 +209,20 @@ def api_view_source(request):
     else:
         response = make_api_response({"error": "Missing Parameters"}, 422)
     return response
+
+@request_method(['GET'])
+@csrf_exempt
+def api_java_file(request):
+    form = forms.JavaFileForm(request.GET)
+    if not form.is_valid():
+        return JsonResponse(FormUtil.errors_message(form), status=400)
+    return java_file.run(request, IS_API)
+
+
+@request_method(['POST'])
+@csrf_exempt
+def api_find(request):
+    form = forms.FindForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse(FormUtil.errors_message(form), status=400)
+    return find.run(request, IS_API)

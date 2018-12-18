@@ -19,7 +19,12 @@
               <div class="table-responsive">
                   <table class="table table-bordered table-hover table-striped">
                     <tbody>
-                    {{ files | safe}}
+                    
+                    {% for file in files %}
+                    <tr>
+                      <td><a href="../ViewSource/?file={{ file }}&md5={{ md5 }}&type=apk">{{ file }}</a></td>
+                    </tr>
+                    {% endfor %}
                     </tbody>
                   </table>
                </div>
