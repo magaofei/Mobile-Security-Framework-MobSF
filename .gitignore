@@ -68,6 +68,10 @@ logs/
 uploads/
 db.sqlite3
 secret
+CapFuzz/
+
 
 #IntelliJ IDE
 .idea
+
+
