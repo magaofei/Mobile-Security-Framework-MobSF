@@ -889,3 +889,6 @@ def get_manifest_file(app_path, app_dir, tools_dir):
         return manifest
     except:
         PrintException("[ERROR]Getting Manifest file")
+
+
+
