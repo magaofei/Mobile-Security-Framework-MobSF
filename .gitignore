@@ -74,4 +74,4 @@ CapFuzz/
 #IntelliJ IDE
 .idea
 
-
+**/migrations/**
